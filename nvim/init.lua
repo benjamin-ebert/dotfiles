@@ -128,7 +128,12 @@ require("lazy").setup({
           vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
 
           -- Find references/usages
-          vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+          -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+          vim.keymap.set('n', 'gr', function()
+            require('telescope.builtin').lsp_references({
+              incluce_declaration = false,
+            })
+          end, opts)
 
           -- Go to type definition
           vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
