@@ -342,96 +342,43 @@ require("lazy").setup({
     end
   },
 
-  -- Right sidebar scrollbar with git changes and diagnostics
+  -- Right sidebar scrollbar with entire file indicators
   {
-    'petertriho/nvim-scrollbar',
+    'lewis6991/satellite.nvim',
     config = function()
-      require('scrollbar').setup({
-        marks = {
-          Cursor = {
-            text = "•",
-            priority = 0,
-            highlight = "CursorLine",
-          },
-          Search = {
-            text = { "─", "═" },
-            priority = 1,
-            highlight = "Search",
-          },
-          Error = {
-            text = { "─", "═" },
-            priority = 2,
-            highlight = "DiagnosticError",
-          },
-          Warn = {
-            text = { "─", "═" },
-            priority = 3,
-            highlight = "DiagnosticWarn",
-          },
-          Info = {
-            text = { "─", "═" },
-            priority = 4,
-            highlight = "DiagnosticInfo",
-          },
-          Hint = {
-            text = { "─", "═" },
-            priority = 5,
-            highlight = "DiagnosticHint",
-          },
-          GitAdd = {
-            text = "┃",
-            priority = 7,
-            highlight = "GitSignsAdd",
-          },
-          GitChange = {
-            text = "┃",
-            priority = 7,
-            highlight = "GitSignsChange",
-          },
-          GitDelete = {
-            text = "▁",
-            priority = 7,
-            highlight = "GitSignsDelete",
-          },
-        },
-        autocmd = {
-          render = {
-            "BufWinEnter",
-            "TabEnter",
-            "TermEnter",
-            "WinEnter",
-            "CmdwinLeave",
-            "TextChanged",
-            "TextChangedI",
-            "VimResized",
-            "WinScrolled",
-            "CursorMoved",
-            "CursorMovedI",
-            "BufEnter",
-            "DiagnosticChanged",
-          },
-          clear = {
-            "BufWinLeave",
-            "TabLeave",
-            "TermLeave",
-            "WinLeave",
-          },
-        },
+      require('satellite').setup({
+        current_only = false,
+        winblend = 50,
+        zindex = 40,
+        excluded_filetypes = { 'TelescopePrompt' },
+        width = 2,
         handlers = {
-          cursor = true,
-          diagnostic = true,
-          gitsigns = true,
-          handle = true,
-          search = true,
-        },
+          cursor = {
+            enable = true,
+            symbols = { '⎺', '⎻', '⎼', '⎽' }
+          },
+          search = {
+            enable = true,
+          },
+          diagnostic = {
+            enable = true,
+            signs = {'-', '=', '≡'},
+            min_severity = vim.diagnostic.severity.HINT
+          },
+          gitsigns = {
+            enable = true,
+            signs = {
+              add = "│",
+              change = "│",
+              delete = "-",
+            }
+          }
+        }
       })
     end
   },
 })
 
--- Configure scrollbar handlers for git and search
-require('scrollbar.handlers.gitsigns').setup()
-require('scrollbar.handlers.search').setup()
 
 -- Keybinding for Ctrl+P - smart file finder with frecency ranking
 vim.keymap.set('n', '<C-p>', function()
