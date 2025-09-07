@@ -287,7 +287,28 @@ require("lazy").setup({
     'nvim-telescope/telescope.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
-      require('telescope').setup()
+      require('telescope').setup({
+        extensions = {
+          smart_open = {
+            match_algorithm = 'fzf',
+            result_limit = 40,
+            show_scores = false,
+          },
+        },
+      })
+    end
+  },
+
+  -- Smart file opening with frecency ranking
+  {
+    'danielfalk/smart-open.nvim',
+    branch = '0.2.x',
+    dependencies = {
+      'kkharji/sqlite.lua',
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    },
+    config = function()
+      require('telescope').load_extension('smart_open')
     end
   },
 
@@ -312,11 +333,10 @@ require("lazy").setup({
   },
 })
 
--- Keybinding for Ctrl+P
--- vim.keymap.set('n', '<C-p>', ':Files<CR>')
--- Show most recently used files first
---vim.keymap.set('n', '<C-p>', ':History<CR>')
-vim.keymap.set('n', '<C-p>', ':Telescope oldfiles<CR>')
+-- Keybinding for Ctrl+P - smart file finder with frecency ranking
+vim.keymap.set('n', '<C-p>', function()
+  require('telescope').extensions.smart_open.smart_open()
+end)
 
 -- Scroll while keeping cursor in place
 vim.keymap.set('n', '<C-e>', '<C-e>j')
