@@ -56,6 +56,16 @@ require("lazy").setup({
         changedelete = { text = '▊' },
         untracked    = { text = '▊' },
       },
+      watch_gitdir = {
+        interval = 1000,
+        follow_files = true
+      },
+      update_debounce = 100,
+      attach_to_untracked = true,
+      current_line_blame = false,
+      current_line_blame_opts = {
+        delay = 300,
+      },
     })
     end
   },
@@ -331,7 +341,97 @@ require("lazy").setup({
       end)
     end
   },
+
+  -- Right sidebar scrollbar with git changes and diagnostics
+  {
+    'petertriho/nvim-scrollbar',
+    config = function()
+      require('scrollbar').setup({
+        marks = {
+          Cursor = {
+            text = "•",
+            priority = 0,
+            highlight = "CursorLine",
+          },
+          Search = {
+            text = { "─", "═" },
+            priority = 1,
+            highlight = "Search",
+          },
+          Error = {
+            text = { "─", "═" },
+            priority = 2,
+            highlight = "DiagnosticError",
+          },
+          Warn = {
+            text = { "─", "═" },
+            priority = 3,
+            highlight = "DiagnosticWarn",
+          },
+          Info = {
+            text = { "─", "═" },
+            priority = 4,
+            highlight = "DiagnosticInfo",
+          },
+          Hint = {
+            text = { "─", "═" },
+            priority = 5,
+            highlight = "DiagnosticHint",
+          },
+          GitAdd = {
+            text = "┃",
+            priority = 7,
+            highlight = "GitSignsAdd",
+          },
+          GitChange = {
+            text = "┃",
+            priority = 7,
+            highlight = "GitSignsChange",
+          },
+          GitDelete = {
+            text = "▁",
+            priority = 7,
+            highlight = "GitSignsDelete",
+          },
+        },
+        autocmd = {
+          render = {
+            "BufWinEnter",
+            "TabEnter",
+            "TermEnter",
+            "WinEnter",
+            "CmdwinLeave",
+            "TextChanged",
+            "TextChangedI",
+            "VimResized",
+            "WinScrolled",
+            "CursorMoved",
+            "CursorMovedI",
+            "BufEnter",
+            "DiagnosticChanged",
+          },
+          clear = {
+            "BufWinLeave",
+            "TabLeave",
+            "TermLeave",
+            "WinLeave",
+          },
+        },
+        handlers = {
+          cursor = true,
+          diagnostic = true,
+          gitsigns = true,
+          handle = true,
+          search = true,
+        },
+      })
+    end
+  },
 })
+
+-- Configure scrollbar handlers for git and search
+require('scrollbar.handlers.gitsigns').setup()
+require('scrollbar.handlers.search').setup()
 
 -- Keybinding for Ctrl+P - smart file finder with frecency ranking
 vim.keymap.set('n', '<C-p>', function()
@@ -416,8 +516,6 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
 -- when finding usages of function, then clicking one of the items, list pane should Auto-close
 -- when finding usages of function, it should exclude definition?
 -- when selecting text, then hitting / , the selected text should be in the search field
--- telesope file search for 'page.tsx' doesn't list all page.tsx files, only three
--- file explorer (rarely)
 -- slightly more space between line numbers and rest of editor text
 -- ability to revert changes line by line, looking at the change indications in the sidebar
 
