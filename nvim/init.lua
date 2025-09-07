@@ -444,6 +444,16 @@ vim.opt.smartcase = true
 -- Clear search highlight with Esc
 vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>')
 
+-- Search with selected text in visual mode
+vim.keymap.set('v', '/', function()
+  local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
+  vim.api.nvim_feedkeys(esc, 'nx', false)
+  local selected_text = vim.fn.getregion(vim.fn.getpos("'<"), vim.fn.getpos("'>"), {type = vim.fn.visualmode()})[1]
+  -- Escape special characters for search
+  selected_text = vim.fn.escape(selected_text, '/\\')
+  vim.api.nvim_feedkeys('/' .. selected_text, 'n', false)
+end)
+
 -- Search text
 vim.keymap.set('n', '<leader>fg', ':Telescope live_grep<CR>')
 -- Find files
@@ -462,7 +472,6 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
 -- TODO
 -- when finding usages of function, then clicking one of the items, list pane should Auto-close
 -- when finding usages of function, it should exclude definition?
--- when selecting text, then hitting / , the selected text should be in the search field
 -- slightly more space between line numbers and rest of editor text
 -- ability to revert changes line by line, looking at the change indications in the sidebar
 
