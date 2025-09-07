@@ -393,6 +393,11 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
 --vim.env.FZF_DEFAULT_OPTS = '--bind=ctrl-o:down'
 
 -- TODO
+-- when finding usages of function, then clicking one of the items, list pane should Auto-close
+-- when finding usages of function, it should exclude definition?
+-- when selecting text, then hitting / , the selected text should be in the search field
+-- telesope file search for 'page.tsx' doesn't list all page.tsx files, only three
 -- file explorer (rarely)
 -- slightly more space between line numbers and rest of editor text
+-- ability to revert changes line by line, looking at the change indications in the sidebar
 
