@@ -10,6 +10,10 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- No colorscheme, use terminal colors
+vim.opt.termguicolors = false
+vim.cmd('colorscheme default')
+
 -- Setup plugins
 require("lazy").setup({
 	-- FZF for fuzzy finding
@@ -35,11 +39,19 @@ require("lazy").setup({
 		end
 	},
 
-  -- Color scheme github light
+  -- Color scheme github light (commented out at the moment)
 	{
 		'projekt0n/github-nvim-theme',
 		config = function()
-			vim.cmd('colorscheme github_light')
+			-- vim.cmd('colorscheme github_light')
+      -- Make nvim take whatever background the terminal has
+      vim.cmd([[
+        highlight Normal guibg=NONE ctermbg=NONE
+        highlight NonText guibg=NONE ctermbg=NONE
+        highlight SignColumn guibg=NONE ctermbg=NONE
+        highlight EndOfBuffer guibg=NONE ctermbg=NONE
+      ]])
+
 		end
 	},
 
