@@ -16,6 +16,11 @@ if [ -d ~/.config/nvim ] && [ ! -L ~/.config/nvim ]; then
     mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)
 fi
 
+if [ -d ~/.config/ghostty ] && [ ! -L ~/.config/ghostty ]; then
+    echo -e "${YELLOW}Backing up existing ghostty config...${NC}"
+    mv ~/.config/ghostty ~/.config/ghostty.backup.$(date +%Y%m%d_%H%M%S)
+fi
+
 if [ -f ~/.bashrc ] && [ ! -L ~/.bashrc ]; then
     echo -e "${YELLOW}Backing up existing bashrc...${NC}"
     mv ~/.bashrc ~/.bashrc.backup.$(date +%Y%m%d_%H%M%S)
@@ -29,6 +34,7 @@ fi
 # Create symlinks
 echo "Creating symlinks..."
 ln -sf ~/dotfiles/nvim ~/.config/nvim
+ln -sf ~/dotfiles/ghostty/ ~/.config/ghostty
 ln -sf ~/dotfiles/bashrc ~/.bashrc
 ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
 
