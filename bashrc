@@ -31,4 +31,22 @@ alias n='nvim'
 alias l='ls -lah'
 alias s='git status'
 
-fastfetch
+# Ghostty theme switching
+light() {
+    sed -i '66s/^# *//' ~/dotfiles/ghostty/config  # uncomment light theme
+    sed -i '78s/^/# /' ~/dotfiles/ghostty/config   # comment dark theme
+    # kill -SIGUSR2 $(pgrep ghostty) 2>/dev/null || echo "Switched to light theme (restart Ghostty if needed)"
+    echo "Switched to light theme - restart config by pressing Ctrl+Shift+,"
+}
+
+dark() {
+    sed -i '66s/^/# /' ~/dotfiles/ghostty/config   # comment light theme
+    sed -i '78s/^# *//' ~/dotfiles/ghostty/config  # uncomment dark theme
+    # kill -SIGUSR2 $(pgrep ghostty) 2>/dev/null || echo "Switched to dark theme (restart Ghostty if needed)"
+    echo "Switched to dark theme - restart config by pressing Ctrl+Shift+,"
+}
+
+# Only run fastfetch in interactive terminals, not when Claude runs commands
+if [ -z "$CLAUDECODE" ]; then
+    fastfetch
+fi
