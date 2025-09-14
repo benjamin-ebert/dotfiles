@@ -29,3 +29,6 @@ alias xclip='xclip -sel clipboard'
 alias nv='nvim'
 alias n='nvim'
 alias l='ls -lah'
+alias s='git status'
+
+fastfetch
