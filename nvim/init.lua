@@ -1,3 +1,6 @@
+-- Skip the deprecated ts_context_commentstring module to speed up loading
+vim.g.skip_ts_context_commentstring_module = true
+
 --Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -27,14 +30,20 @@ require("lazy").setup({
 	{
 		'nvim-treesitter/nvim-treesitter',
 		build = ':TSUpdate',
+		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
 		config = function()
 			require('nvim-treesitter.configs').setup({
 	ensure_installed = {
-		"javascript", "typescript", "python", "lua",
+		"javascript", "typescript", "tsx", "python", "lua",
 		"go", "html", "css", "json", "markdown"
 	},
 	highlight = { enable = true },
 	indent = { enable = true }
+			})
+			
+			-- Setup ts_context_commentstring
+			require('ts_context_commentstring').setup({
+				enable_autocmd = false,
 			})
 		end
 	},
@@ -342,8 +351,12 @@ require("lazy").setup({
   -- Smart commenting with Ctrl+/
   {
     'numToStr/Comment.nvim',
+    dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
     config = function()
-      require('Comment').setup()
+      require('Comment').setup({
+        -- Enable integration with nvim-ts-context-commentstring
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      })
       
       -- Map Ctrl+/ for normal mode (single line)
       vim.keymap.set('n', '<C-_>', function()
@@ -487,6 +500,10 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
 --vim.env.FZF_DEFAULT_OPTS = '--bind=ctrl-o:down'
 
 -- TODO
+-- in html code, i want to be able to start typing a tag, press tab, and it will auto-complete -> emmet?
+-- when searching for stuff with ctrl+p, i want to see a preview of the file that is currently selected in the list
+-- somehow wanna see what exactly has changed in a given place that has git change indication -> on hover over the sidebar?
+-- in typescript, when diagnostics shows that there's a problem, wanna see what exactly is the problem, like in go files
 -- when finding usages of function, then clicking one of the items, list pane should Auto-close
 -- when finding usages of function, it should exclude definition?
 -- slightly more space between line numbers and rest of editor text
