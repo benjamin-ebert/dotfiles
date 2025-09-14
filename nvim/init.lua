@@ -257,6 +257,9 @@ require("lazy").setup({
               cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
+            elseif vim.fn['emmet#isExpandable']() == 1 then
+              -- Expand emmet and then move to next edit point (between tags)
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>,<C-y>n', true, false, true), 'i', false)
             else
               fallback()
             end
@@ -403,6 +406,38 @@ require("lazy").setup({
               delete = "-",
             }
           }
+        }
+      })
+    end
+  },
+
+  -- Emmet for HTML abbreviation expansion
+  {
+    'mattn/emmet-vim',
+    ft = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'jsx', 'tsx' },
+    config = function()
+      -- Configure Emmet to work with Tab (will be handled by nvim-cmp fallback)
+      vim.g.user_emmet_expandabbr_key = '<Tab>'
+      -- Only enable for specific file types
+      vim.g.user_emmet_install_global = 0
+      -- Enable Emmet for these file types
+      vim.cmd([[
+        autocmd FileType html,css,javascript,typescript,javascriptreact,typescriptreact,jsx,tsx EmmetInstall
+      ]])
+    end
+  },
+
+  -- Auto-rename HTML tags (VSCode-like behavior)
+  {
+    'windwp/nvim-ts-autotag',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    ft = { 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'jsx', 'tsx', 'vue', 'svelte', 'php' },
+    config = function()
+      require('nvim-ts-autotag').setup({
+        opts = {
+          enable_close = false,     -- Disable auto-closing (VSCode doesn't do this)
+          enable_rename = true,     -- Keep auto-rename (change <div> -> </div> becomes </span>)
+          enable_close_on_slash = false -- Disable auto close on trailing </
         }
       })
     end
