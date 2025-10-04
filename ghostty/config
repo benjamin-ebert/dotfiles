@@ -44,9 +44,9 @@
 
 window-decoration = none
 gtk-tabs-location = hidden
-# fullscreen = true
+fullscreen = true
 
-# in order for opacity to work, comment out fullscreen = true
+# for background-opacity to work, fullscreen must be set to false or be commented out
 background-opacity = 0.85
 
 # this doesn't seem to work at all
@@ -64,6 +64,7 @@ font-family = JetBrains Mono
 # theme = GitHub-Light-Default
 # theme = Night Owlish Light
 # theme = Tomorrow
+# theme = Monokai Pro Light Sun
 # theme = zenbones
 # theme = seoulbones_light
 # theme = Belafonte Day
@@ -72,17 +73,16 @@ font-family = JetBrains Mono
 
 # theme = Havn Daggry
 # theme = Melange_light
-# theme = Monokai Pro Light Sun
 
 # Dark Themes
-theme = zenburned
+theme = Monokai Pro Machine
+# theme = zenburned
 # theme = Mariana
 # theme = Red Planet
 # theme = MonaLisa
 # theme = Batman
 # theme = Tomorrow Night Eighties
 # theme = Zenburn
-# theme = Monokai Pro Machine
 
 # background = #333333
 

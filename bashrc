@@ -29,7 +29,10 @@ alias xclip='xclip -sel clipboard'
 alias nv='nvim'
 alias n='nvim'
 alias l='ls -lah'
+alias ..='cd ..'
 alias s='git status'
+alias add='git add'
+alias commit='git commit'
 
 # Ghostty theme switching
 light() {
@@ -46,7 +49,11 @@ dark() {
     echo "Switched to dark theme - restart config by pressing Ctrl+Shift+,"
 }
 
+# TODO if not already in a tmux session, run tmux
+
 # Only run fastfetch in interactive terminals, not when Claude runs commands
 if [ -z "$CLAUDECODE" ]; then
     fastfetch
 fi
+
+alias claude="/home/benjaminebert/.claude/local/claude"
